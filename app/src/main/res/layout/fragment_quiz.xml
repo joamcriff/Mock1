@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.QuizFragment"
+    android:background="#FF5722"
+    android:id="@+id/quiz"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:orientation="horizontal">
+      >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Time:   "
+          />
+      <TextView
+          android:id="@+id/time"
+          android:layout_width="30dp"
+          android:layout_height="wrap_content"
+          android:text="25"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Correct Answer:   "
+          />
+      <TextView
+          android:id="@+id/correct"
+          android:layout_width="30dp"
+          android:layout_height="wrap_content"
+          android:text="0"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Wrong Answer:   "
+          />
+      <TextView
+          android:id="@+id/wrong"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="0"
+          />
+  </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="380dp"
+            android:layout_height="150dp"
+            android:gravity="center"
+            android:textSize="23sp"
+            android:text="@string/question"
+            android:background="#fff"
+            />
+        <Button
+            android:id="@+id/op1"
+            android:layout_width="280dp"
+            android:layout_marginTop="30dp"
+            android:text="option 1"
+            android:background="#fff"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/op2"
+            android:layout_width="280dp"
+            android:layout_marginTop="20dp"
+            android:background="#fff"
+            android:text="option 2"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/op3"
+            android:layout_width="280dp"
+            android:background="#fff"
+            android:layout_height="wrap_content"
+            android:text="option 3"
+            android:layout_marginTop="20dp"
+            />
+        <Button
+            android:id="@+id/op4"
+            android:background="#fff"
+            android:layout_width="280dp"
+            android:text="option 4"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_marginTop="80dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/finishQ"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:text="@string/finish"
+            android:textColor="#FF5722"
+            tools:layout_editor_absoluteX="46dp"
+            tools:layout_editor_absoluteY="0dp"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/nextQ"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:text="@string/next"
+            android:textColor="#FF5722"
+            tools:layout_editor_absoluteX="223dp"
+            tools:layout_editor_absoluteY="0dp"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

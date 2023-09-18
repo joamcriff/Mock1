@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Mock1</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="quiz_game">Quiz Game</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sing_in">Sign In</string>
+    <string name="sign_in_gg">Continue with Google</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="no_have_accout">Don\'t you have an account yet?</string>
+    <string name="forgot">I forgot my password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="reset_password">RESET PASSWORD</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_out">Sign out</string>
+    <string name="start_quiz">START QUIZ</string>
+    <string name="question">Question</string>
+    <string name="finish">FINISH</string>
+    <string name="next">NEXT</string>
+    <string name="play_again">PLAY AGAIN</string>
+    <string name="exit">EXIT</string>
+</resources>
