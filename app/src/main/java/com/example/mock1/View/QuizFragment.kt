@@ -71,11 +71,9 @@ class QuizFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_quiz, container, false)
-
         // Khởi tạo ViewModel
         questionViewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
 
-        // Ánh xạ các thành phần giao diện
         questionTextView = view.findViewById(R.id.question)
         option1Button = view.findViewById(R.id.op1)
         option2Button = view.findViewById(R.id.op2)
@@ -88,21 +86,17 @@ class QuizFragment : Fragment() {
         wrong = view.findViewById(R.id.wrong)
 
 
-        timer = object : CountDownTimer(5000, 1000) {
+        timer = object : CountDownTimer(25000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                // Cập nhật giao diện với thời gian còn lại sau mỗi giây
-                // Ví dụ: hiển thị thời gian trên một TextView
                 time.text = "${millisUntilFinished / 1000}"
             }
 
             override fun onFinish() {
-                // Thời gian kết thúc, xử lý tại đây
                 isTimeUp = true
                 handleTimeUp()
             }
         }
 
-        // Gắn sự kiện click cho các nút lựa chọn
         option1Button.setOnClickListener {
             handleOptionClick(option1Button)
         }
@@ -186,7 +180,6 @@ class QuizFragment : Fragment() {
         }
     }
 
-
     private fun finish() {
         val intent = Intent(requireContext(), Login::class.java)
         startActivity(intent)
@@ -231,7 +224,6 @@ class QuizFragment : Fragment() {
         fragmentTransaction?.commit()
     }
 
-
     private fun resetOptionButtons() {
         option1Button.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
@@ -259,14 +251,12 @@ class QuizFragment : Fragment() {
         )
     }
 
-
     private fun stateQuiz() {
         correct.text = "$correctAnswerCount"
         wrong.text = "$wrongAnswerCount"
     }
 
     private fun handleOptionClick(selectedOptionButton: Button) {
-        // Kiểm tra xem người dùng đã chọn đúng lựa chọn hay không
         val isCorrect = selectedOptionButton == correctOption
 
         // Đặt màu nền cho lựa chọn đã chọn
@@ -282,10 +272,8 @@ class QuizFragment : Fragment() {
         timer.cancel()
 
         if (isCorrect) {
-            // Nếu đúng, tăng số câu trả lời đúng
             correctAnswerCount++
         } else {
-            // Nếu sai, tăng số câu trả lời sai và đặt màu nền xanh cho đáp án đúng
             wrongAnswerCount++
             correctOption.backgroundTintList =
                 ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
