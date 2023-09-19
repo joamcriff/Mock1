@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlin.properties.Delegates
 
 class QuestionRepository {
     var questionList: ArrayList<QuestionModel> = arrayListOf()
@@ -23,6 +24,7 @@ class QuestionRepository {
                         questionList.add(user!!)
                     }
                     callback.onUserListReady(questionList)
+
                 } else {
                     callback.onDataError("No users found.")
                 }

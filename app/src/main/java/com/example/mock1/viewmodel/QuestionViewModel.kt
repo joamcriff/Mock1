@@ -22,6 +22,7 @@ class QuestionViewModel : ViewModel(), QuestionRepository.UserCallback {
     private fun loadQuestions() {
         repository.getQuestions(this)
     }
+
     override fun onUserListReady(userList: ArrayList<QuestionModel>) {
         (questions as MutableLiveData).value = userList
 

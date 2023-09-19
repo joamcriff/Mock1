@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FF5722"
-    tools:context=".View.ResultFragment"
-    android:orientation="vertical">
+    tools:context=".View.ResultFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/anh3"
-        />
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:layout_marginTop="40dp"
@@ -52,34 +57,32 @@
             />
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:gravity="center">
 
         <Button
-            android:id="@+id/finish"
+            android:id="@+id/playAgain"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="#fff"
             android:text="@string/play_again"
             android:textColor="#FF5722"
             tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="46dp"
-            tools:layout_editor_absoluteY="0dp" />
+             />
 
         <Button
-            android:id="@+id/next"
+            android:id="@+id/exit"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:background="#fff"
             android:text="@string/exit"
             android:textColor="#FF5722"
             tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="223dp"
-            tools:layout_editor_absoluteY="0dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+             />
+    </LinearLayout>
+    </LinearLayout>
 
-
-</LinearLayout>
+</FrameLayout>
