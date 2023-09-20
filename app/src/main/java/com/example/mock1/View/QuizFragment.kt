@@ -71,8 +71,6 @@ class QuizFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_quiz, container, false)
-        // Khởi tạo ViewModel
-        questionViewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
 
         questionTextView = view.findViewById(R.id.question)
         option1Button = view.findViewById(R.id.op1)
@@ -112,13 +110,10 @@ class QuizFragment : Fragment() {
 
         questionViewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
 
-        // ...
-
         // Đăng ký theo dõi LiveData questions
         questionViewModel.questions.observe(viewLifecycleOwner, Observer { questionModels ->
             // Kiểm tra nếu danh sách câu hỏi không rỗng
             if (!questionModels.isNullOrEmpty()) {
-                // Lấy kích thước của danh sách câu hỏi và lưu vào biến sizeT
                 sizeT = questionModels.size
             }
         })
@@ -160,12 +155,10 @@ class QuizFragment : Fragment() {
 
     private fun nextClick() {
         if (index < sizeT - 1) {
-            // Tăng chỉ số câu hỏi lên để lấy câu hỏi tiếp theo từ danh sách
             index++
             loadNextQuestion()
             resetOptionButtons()
         } else {
-            // Đã hết câu hỏi, hiển thị hộp thoại hoặc thực hiện các xử lý khác
             showDialog()
         }
     }
@@ -176,7 +169,6 @@ class QuizFragment : Fragment() {
             resetOptionButtons()
             correctOption.backgroundTintList =
                 ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
-            println("mau nen")
         }
     }
 
@@ -269,15 +261,15 @@ class QuizFragment : Fragment() {
             ) else ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
 
         // Tạm dừng đồng hồ đếm thời gian
-        timer.cancel()
+            timer.cancel()
 
-        if (isCorrect) {
-            correctAnswerCount++
-        } else {
-            wrongAnswerCount++
-            correctOption.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
-        }
+            if (isCorrect) {
+                correctAnswerCount++
+            } else {
+                wrongAnswerCount++
+                correctOption.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
+            }
     }
 
     companion object {
