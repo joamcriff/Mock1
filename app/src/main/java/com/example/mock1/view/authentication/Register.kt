@@ -1,4 +1,4 @@
-package com.example.mock1
+package com.example.mock1.view.authentication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,27 +8,27 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mock1.databinding.ActivityLoginBinding
+import com.example.mock1.databinding.ActivityRegisterBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
 class Register : AppCompatActivity() {
-    lateinit var editTextEmail : EditText
-    lateinit var editTextPassword : EditText
-    lateinit var btn : Button
     lateinit var auth : FirebaseAuth
+
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
-        auth = FirebaseAuth.getInstance()
-        editTextEmail = findViewById(R.id.email_sign_up)
-        editTextPassword = findViewById(R.id.password_sign_up)
-        btn = findViewById(R.id.btn_sign_up)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
+        auth = FirebaseAuth.getInstance()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        btn.setOnClickListener {
+        binding.btnSU.setOnClickListener {
             onClick()
         }
 
@@ -40,8 +40,8 @@ class Register : AppCompatActivity() {
     }
 
     private fun onClick() {
-        val email : String = editTextEmail.text.toString()
-        val password : String = editTextPassword.text.toString()
+        val email : String = binding.emailSU.text.toString()
+        val password : String = binding.passwordSU.text.toString()
 
         if(TextUtils.isEmpty(email)) {
             Toast.makeText(this@Register, "Enter email", Toast.LENGTH_SHORT).show()

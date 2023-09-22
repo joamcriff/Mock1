@@ -1,30 +1,28 @@
-package com.example.mock1
+package com.example.mock1.view.authentication
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
+import com.example.mock1.databinding.ActivityForgotPasswordBinding
+import com.example.mock1.SecondActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class Forgot_Password : AppCompatActivity() {
+class ForgotPassword : AppCompatActivity() {
 
-    lateinit var btn : Button
-    lateinit var emailText : EditText
     lateinit var auth : FirebaseAuth
+    private lateinit var binding: ActivityForgotPasswordBinding
     lateinit var strEmail : String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgot_password)
+        binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        btn = findViewById(R.id.btn_reset)
-        emailText = findViewById(R.id.email_reset)
         auth = FirebaseAuth.getInstance()
 
-        btn.setOnClickListener {
+        binding.btnRS.setOnClickListener {
             onclick()
         }
 
@@ -38,12 +36,12 @@ class Forgot_Password : AppCompatActivity() {
     }
 
     private fun onclick() {
-        strEmail = emailText.text.toString().trim()
+        strEmail = binding.emailRS.text.toString().trim()
 
        if(!TextUtils.isEmpty(strEmail)) {
             resetPassword()
        } else {
-           emailText.error = "Email field can't be empty"
+           binding.emailRS.error = "Email field can't be empty"
        }
     }
 
@@ -51,12 +49,12 @@ class Forgot_Password : AppCompatActivity() {
         auth.sendPasswordResetEmail(strEmail)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this@Forgot_Password, "Reset Successful", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@Forgot_Password, SecondActivity::class.java)
+                    Toast.makeText(this@ForgotPassword, "Reset Successful", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@ForgotPassword, SecondActivity::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(
-                        this@Forgot_Password,
+                        this@ForgotPassword,
                         "Authentication failed.",
                         Toast.LENGTH_SHORT,
                     ).show()

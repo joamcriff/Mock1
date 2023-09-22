@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.mock1.view.Login
 
 class MainActivity : AppCompatActivity() {
 

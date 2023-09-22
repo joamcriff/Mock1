@@ -1,4 +1,4 @@
-package com.example.mock1.View
+package com.example.mock1.view
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -11,14 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.mock1.Login
-import com.example.mock1.Model.QuestionModel
 import com.example.mock1.R
 import com.example.mock1.SecondActivity
+import com.example.mock1.View.ResultFragment
+import com.example.mock1.databinding.FragmentQuizBinding
 import com.example.mock1.viewmodel.QuestionViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,19 +36,11 @@ class QuizFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var questionViewModel: QuestionViewModel
-    private lateinit var questionTextView: TextView
-    private lateinit var option1Button: Button
-    private lateinit var option2Button: Button
-    private lateinit var option3Button: Button
-    private lateinit var option4Button: Button
-    private lateinit var correctOption: Button
-    private lateinit var finishBtn: Button
-    private lateinit var nextBtn: Button
-    private lateinit var time : TextView
-    private lateinit var correct : TextView
-    private lateinit var wrong : TextView
     private lateinit var timer: CountDownTimer
+    private lateinit var correctOption: Button
     private var isTimeUp = false
+
+    private lateinit var binding: FragmentQuizBinding
 
     private var correctAnswerCount = 0
     private var wrongAnswerCount = 0
@@ -70,23 +61,14 @@ class QuizFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_quiz, container, false)
+        binding = FragmentQuizBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        questionTextView = view.findViewById(R.id.question)
-        option1Button = view.findViewById(R.id.op1)
-        option2Button = view.findViewById(R.id.op2)
-        option3Button = view.findViewById(R.id.op3)
-        option4Button = view.findViewById(R.id.op4)
-        finishBtn = view.findViewById(R.id.finishQ)
-        nextBtn = view.findViewById(R.id.nextQ)
-        time = view.findViewById(R.id.time)
-        correct = view.findViewById(R.id.correct)
-        wrong = view.findViewById(R.id.wrong)
 
 
         timer = object : CountDownTimer(25000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                time.text = "${millisUntilFinished / 1000}"
+                binding.time.text = "${millisUntilFinished / 1000}"
             }
 
             override fun onFinish() {
@@ -95,23 +77,23 @@ class QuizFragment : Fragment() {
             }
         }
 
-        option1Button.setOnClickListener {
-            handleOptionClick(option1Button)
+        binding.op1.setOnClickListener {
+            handleOptionClick(binding.op1)
         }
-        option2Button.setOnClickListener {
-            handleOptionClick(option2Button)
+        binding.op2.setOnClickListener {
+            handleOptionClick(binding.op2)
         }
-        option3Button.setOnClickListener {
-            handleOptionClick(option3Button)
+        binding.op3.setOnClickListener {
+            handleOptionClick(binding.op3)
         }
-        option4Button.setOnClickListener {
-            handleOptionClick(option4Button)
+        binding.op3.setOnClickListener {
+            handleOptionClick(binding.op3)
         }
 
         questionViewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
 
         // Đăng ký theo dõi LiveData questions
-        questionViewModel.questions.observe(viewLifecycleOwner, Observer { questionModels ->
+        questionViewModel.getQuestionList().observe(viewLifecycleOwner, Observer { questionModels ->
             // Kiểm tra nếu danh sách câu hỏi không rỗng
             if (!questionModels.isNullOrEmpty()) {
                 sizeT = questionModels.size
@@ -120,9 +102,9 @@ class QuizFragment : Fragment() {
 
         // Khởi tạo câu hỏi ban đầu
         loadNextQuestion()
-        nextBtn.setOnClickListener { nextClick() }
+        binding.nextQ.setOnClickListener { nextClick() }
 
-        finishBtn.setOnClickListener {
+        binding.finishQ.setOnClickListener {
             finish()
         }
 
@@ -131,21 +113,21 @@ class QuizFragment : Fragment() {
 
     private fun loadNextQuestion() {
         questionViewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
-        questionViewModel.questions.observe(viewLifecycleOwner, Observer { questionModels ->
+        questionViewModel.getQuestionList().observe(viewLifecycleOwner, Observer { questionModels ->
             if (!questionModels.isNullOrEmpty()) {
-                val question = questionModels[index] // Lấy câu hỏi đầu tiên hoặc tùy chỉnh logic ở đây
+                val question = questionModels[index]
                 // Hiển thị câu hỏi lên giao diện
-                questionTextView.text = question.q
-                option1Button.text = question.a
-                option2Button.text = question.b
-                option3Button.text = question.c
-                option4Button.text = question.d
+                binding.question.text = question.q
+                binding.op1.text = question.a
+                binding.op2.text = question.b
+                binding.op3.text = question.c
+                binding.op4.text = question.d
                 correctOption = when (question.answer) {
-                    "a" -> option1Button
-                    "b" -> option2Button
-                    "c" -> option3Button
-                    "d" -> option4Button
-                    else -> option1Button // Đặt mặc định là Option 1
+                    "a" -> binding.op1
+                    "b" -> binding.op2
+                    "c" -> binding.op3
+                    "d" -> binding.op4
+                    else -> binding.op1 // Đặt mặc định là Option 1
                 }
             }
             timer.start()
@@ -164,9 +146,9 @@ class QuizFragment : Fragment() {
     }
 
     private fun handleTimeUp() {
-        if (!isTimeUp) {
+        if (isTimeUp) {
             // Đặt màu nền cho tất cả các nút lựa chọn
-            resetOptionButtons()
+//            resetOptionButtons()
             correctOption.backgroundTintList =
                 ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.green))
         }
@@ -217,25 +199,25 @@ class QuizFragment : Fragment() {
     }
 
     private fun resetOptionButtons() {
-        option1Button.backgroundTintList = ColorStateList.valueOf(
+        binding.op1.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.white
             )
         )
-        option2Button.backgroundTintList = ColorStateList.valueOf(
+        binding.op2.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.white
             )
         )
-        option3Button.backgroundTintList = ColorStateList.valueOf(
+        binding.op3.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.white
             )
         )
-        option4Button.backgroundTintList = ColorStateList.valueOf(
+        binding.op4.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.white
@@ -244,10 +226,11 @@ class QuizFragment : Fragment() {
     }
 
     private fun stateQuiz() {
-        correct.text = "$correctAnswerCount"
-        wrong.text = "$wrongAnswerCount"
+        binding.correct.text = "$correctAnswerCount"
+        binding.wrong.text = "$wrongAnswerCount"
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun handleOptionClick(selectedOptionButton: Button) {
         val isCorrect = selectedOptionButton == correctOption
 
@@ -260,7 +243,6 @@ class QuizFragment : Fragment() {
                 )
             ) else ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.red))
 
-        // Tạm dừng đồng hồ đếm thời gian
             timer.cancel()
 
             if (isCorrect) {

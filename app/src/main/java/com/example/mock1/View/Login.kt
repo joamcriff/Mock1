@@ -1,15 +1,19 @@
-package com.example.mock1
+package com.example.mock1.view
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.mock1.R
+import com.example.mock1.SecondActivity
+import com.example.mock1.UsersModel
+import com.example.mock1.databinding.ActivityLoginBinding
+import com.example.mock1.data.repository.UserRepository
+import com.example.mock1.utils.Resource
+import com.example.mock1.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -23,37 +27,21 @@ import com.google.firebase.database.FirebaseDatabase
 
 
 class Login : AppCompatActivity() {
-    lateinit var btn1 : Button
+    private lateinit var loginViewModel: LoginViewModel
     lateinit var auth : FirebaseAuth
     lateinit var database : FirebaseDatabase
     lateinit var googleSignInClient : GoogleSignInClient
     lateinit var progressDialog : ProgressDialog
-    lateinit var emailText : EditText
-    lateinit var passwordText : EditText
-    lateinit var btn : Button
-    lateinit var btn2 : Button
-    lateinit var forgot : TextView
 
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val intent = Intent(this@Login, SecondActivity::class.java)
-            startActivity(intent)
-        }
-    }
+    private lateinit var binding: ActivityLoginBinding
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-        btn1 = findViewById(R.id.btn1)
-        btn = findViewById(R.id.btn)
-        btn2 = findViewById(R.id.btn_sign_up)
-        emailText = findViewById(R.id.email)
-        passwordText = findViewById(R.id.password)
-        forgot = findViewById(R.id.forgot)
+
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
@@ -62,75 +50,58 @@ class Login : AppCompatActivity() {
         progressDialog.setTitle("Creating account")
         progressDialog.setMessage("We are creating your account")
 
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail().build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        btn.setOnClickListener {
-            onclick()
+        loginViewModel = ViewModelProvider(
+            this,
+            LoginViewModel.ViewModelFactory(UserRepository())
+        )[LoginViewModel::class.java]
+
+
+        binding.btn1.setOnClickListener {
+            signInWithGoogle()
         }
 
-        btn1.setOnClickListener {
+        binding.btn.setOnClickListener {
             signIn()
         }
 
-        btn2.setOnClickListener {
-            onclick2()
-        }
-
-        forgot.setOnClickListener {
-            onclick3()
-        }
     }
 
-    private fun onclick3() {
-        val intent = Intent(this@Login, Forgot_Password::class.java)
-        startActivity(intent)
-    }
+    private fun signIn() {
+        val email = binding.email.text.toString()
+        val password = binding.password.text.toString()
 
-    private fun onclick2() {
-        val intent = Intent(this@Login, Register::class.java)
-        startActivity(intent)
-    }
+        // Gọi phương thức đăng nhập bằng email và password từ ViewModel
+        loginViewModel.signInWithEmailAndPassword(email, password)
 
-    private fun onclick() {
-        val email : String = emailText.text.toString()
-        val password : String = passwordText.text.toString()
-
-        if(TextUtils.isEmpty(email)) {
-            Toast.makeText(this@Login, "Enter email", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if(TextUtils.isEmpty(password)) {
-            Toast.makeText(this@Login, "Enter password", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
+        loginViewModel.userLiveData.observe(this) { resource ->
+            when (resource) {
+                is Resource.Success<*> -> {
                     Toast.makeText(this@Login, "Login Successful", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@Login, SecondActivity::class.java)
                     startActivity(intent)
-                } else {
+                }
 
-                    Toast.makeText(
-                        this@Login,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                is Resource.Error -> {
+                    // Xử lý lỗi, hiển thị thông báo cho người dùng
+                    val error = resource.exception
+                    Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
     }
 
     var RC_SIGN_IN = 40
 
-    private fun signIn() {
-        val intent : Intent = googleSignInClient.signInIntent
-        startActivityForResult(intent, RC_SIGN_IN)
+    private fun signInWithGoogle() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     @Override
@@ -157,10 +128,9 @@ class Login : AppCompatActivity() {
             if (task.isSuccessful) {
                 val user : FirebaseUser? = auth.currentUser
 
-                val users = Users()
-                users.UserId = user?.uid
+                val users = UsersModel()
+                users.userId = user?.uid
                 users.name = user?.displayName
-                users.profile = user?.photoUrl.toString()
 
                 user?.uid?.let { database.reference.child("Users").child(it).setValue(users) }
                 val intent = Intent(this@Login, SecondActivity::class.java)

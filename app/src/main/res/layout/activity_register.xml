@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".Register">
+    tools:context=".view.authentication.Register">
 
     <ImageView
         android:layout_width="400dp"
@@ -21,7 +21,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/email_sign_up"
+            android:id="@+id/emailSU"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -35,7 +35,7 @@
             android:textColorHint="#605C5C" />
 
         <EditText
-            android:id="@+id/password_sign_up"
+            android:id="@+id/passwordSU"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -49,7 +49,7 @@
             android:textColorHint="#605C5C" />
 
         <Button
-            android:id="@+id/btn_sign_up"
+            android:id="@+id/btnSU"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

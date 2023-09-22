@@ -1,17 +1,17 @@
-package com.example.mock1.repository
+package com.example.mock1.data.repository
 
-import androidx.lifecycle.MutableLiveData
-import com.example.mock1.Model.QuestionModel
+
+import com.example.mock1.QuestionModel
+import com.example.mock1.viewmodel.QuestionViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlin.properties.Delegates
 
-class QuestionRepository {
+class QuestionRepository(private val questionViewModel: QuestionViewModel) {
     var questionList: ArrayList<QuestionModel> = arrayListOf()
-    fun getQuestions(callback: UserCallback) {
+     fun getQuestions() {
         val database = Firebase.database
         val myRef = database.getReference("questions")
 
@@ -23,20 +23,14 @@ class QuestionRepository {
                         val user = userSnapshot.getValue(QuestionModel::class.java)
                         questionList.add(user!!)
                     }
-                    callback.onUserListReady(questionList)
-
-                } else {
-                    callback.onDataError("No users found.")
+                    questionViewModel.onUserListReady(questionList)
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                callback.onDataError("Failed to read data: ${databaseError.toException()}")
+
             }
-        })
-    }
-    interface UserCallback {
-        fun onUserListReady(userList: ArrayList<QuestionModel>)
-        fun onDataError(error: String)
+        }
+        )
     }
 }
