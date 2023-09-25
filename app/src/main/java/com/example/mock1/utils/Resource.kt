@@ -1,6 +1,6 @@
 package com.example.mock1.utils
 
-import com.example.mock1.UsersModel
+import com.example.mock1.Model.UsersModel
 import io.grpc.internal.SharedResourceHolder
 
 sealed class Resource<out T> : SharedResourceHolder.Resource<UsersModel> {

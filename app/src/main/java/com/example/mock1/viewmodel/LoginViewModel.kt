@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.mock1.UsersModel
+import com.example.mock1.Model.UsersModel
 import com.example.mock1.data.repository.UserRepository
 import io.grpc.internal.SharedResourceHolder.Resource
 import kotlinx.coroutines.launch

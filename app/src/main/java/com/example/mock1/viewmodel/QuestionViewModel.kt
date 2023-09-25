@@ -3,7 +3,7 @@ package com.example.mock1.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mock1.QuestionModel
+import com.example.mock1.Model.QuestionModel
 import com.example.mock1.data.repository.QuestionRepository
 
 

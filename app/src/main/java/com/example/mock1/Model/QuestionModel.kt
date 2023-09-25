@@ -1,4 +1,4 @@
-package com.example.mock1
+package com.example.mock1.Model
 
 
 data class QuestionModel(
