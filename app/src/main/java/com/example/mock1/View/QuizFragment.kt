@@ -1,8 +1,7 @@
-package com.example.mock1.view
+package com.example.mock1.View
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -15,8 +14,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mock1.R
-import com.example.mock1.SecondActivity
-import com.example.mock1.View.ResultFragment
 import com.example.mock1.databinding.FragmentQuizBinding
 import com.example.mock1.viewmodel.QuestionViewModel
 
@@ -155,8 +152,11 @@ class QuizFragment : Fragment() {
     }
 
     private fun finish() {
-        val intent = Intent(requireContext(), Login::class.java)
-        startActivity(intent)
+        val fragment = StartFragment()
+        val fragmentManager = fragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.quiz, fragment)
+        fragmentTransaction?.commit()
     }
 
     private fun showDialog() {
@@ -166,8 +166,11 @@ class QuizFragment : Fragment() {
 
         alertDialog.setNegativeButton("PLAY AGAIN") {
                 dialog, which ->
-            val intent = Intent(requireContext(), SecondActivity::class.java)
-            startActivity(intent)
+            val fragment = StartFragment()
+            val fragmentManager = fragmentManager
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(R.id.quiz, fragment)
+            fragmentTransaction?.commit()
         }
 
         alertDialog.setPositiveButton("SEE RESULT") {

@@ -1,7 +1,7 @@
 package com.example.mock1.data.repository
 
 
-import com.example.mock1.QuestionModel
+import com.example.mock1.Model.QuestionModel
 import com.example.mock1.viewmodel.QuestionViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.mock1.R
-import com.example.mock1.databinding.FragmentResultBinding
+import com.example.mock1.databinding.FragmentStartBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -15,16 +18,17 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ResultFragment.newInstance] factory method to
+ * Use the [StartFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ResultFragment : Fragment() {
+class StartFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var auth : FirebaseAuth
 
-    private lateinit var binding: FragmentResultBinding
+    private lateinit var binding: FragmentStartBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,49 +43,48 @@ class ResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentResultBinding.inflate(inflater, container, false)
+        binding = FragmentStartBinding.inflate(inflater, container, false)
         val view = binding.root
+        auth = FirebaseAuth.getInstance()
 
-
-        binding.playAgain.setOnClickListener {
-            playClick()
+        val user = Firebase.auth.currentUser
+        if (user == null) {
+            val fragment = LoginFragment()
+            val fragmentManager = fragmentManager
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(R.id.startFragment, fragment)
+            fragmentTransaction?.commit()
+        } else {
+            println("hihi")
         }
 
-        binding.exit.setOnClickListener {
-            exitClick()
+        binding.start.setOnClickListener {
+            onClick1()
         }
 
-        receiveDataFromIntent()
-
+        binding.signOut.setOnClickListener {
+            onClick()
+        }
         return view
     }
 
-    private fun playClick() {
-        val fragment = StartFragment()
+    private fun onClick1() {
+
+        val fragment = SplashFragment()
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.replace(R.id.startFragment, fragment)
+        fragmentTransaction?.addToBackStack(null)
         fragmentTransaction?.commit()
     }
 
-    private fun exitClick() {
+    private fun onClick() {
+        Firebase.auth.signOut()
         val fragment = LoginFragment()
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.replace(R.id.startFragment, fragment)
         fragmentTransaction?.commit()
-    }
-
-    private fun receiveDataFromIntent() {
-        val arguments = arguments
-        if (arguments != null) {
-            val correctAnswer = arguments.getInt("Correct Answer", 0)
-            val wrongAnswer = arguments.getInt("Wrong Answer", 0)
-
-            // Gán giá trị vào TextViews
-            binding.correct1.text = "$correctAnswer"
-            binding.wrong1.text = "$wrongAnswer"
-        }
     }
 
     companion object {
@@ -91,12 +94,12 @@ class ResultFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ResultFragment.
+         * @return A new instance of fragment StartFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ResultFragment().apply {
+            StartFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

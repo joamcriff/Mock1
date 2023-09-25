@@ -1,6 +1,6 @@
 package com.example.mock1.data.repository
 
-import com.example.mock1.UsersModel
+import com.example.mock1.Model.UsersModel
 import com.example.mock1.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

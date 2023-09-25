@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.mock1.R
-import com.example.mock1.view.QuizFragment
 
 
 // TODO: Rename parameter arguments, choose names that match
