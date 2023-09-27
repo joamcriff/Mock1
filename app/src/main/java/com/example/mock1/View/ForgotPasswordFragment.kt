@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mock1.R
 import com.example.mock1.databinding.FragmentForgotPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +49,9 @@ class ForgotPasswordFragment : Fragment() {
         val view = binding.root
         auth = FirebaseAuth.getInstance()
 
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
+
         binding.btnRS.setOnClickListener {
             onclick()
         }
@@ -74,7 +78,6 @@ class ForgotPasswordFragment : Fragment() {
                     val fragmentManager = childFragmentManager
                     val fragmentTransaction = fragmentManager.beginTransaction()
                     fragmentTransaction.replace(R.id.loginFragment, fragment)
-                    fragmentTransaction.addToBackStack(null)
                     fragmentTransaction.commit()
                 } else {
                     Toast.makeText(

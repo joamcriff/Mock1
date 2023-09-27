@@ -5,8 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.mock1.Model.ScoreRankModel
 import com.example.mock1.R
 import com.example.mock1.databinding.FragmentResultBinding
+import com.example.mock1.viewmodel.rank_score_view_model.ScoreViewModel
+import com.example.mock1.viewmodel.rank_score_view_model.ScoreViewModelService
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +33,8 @@ class ResultFragment : Fragment() {
 
 
     private lateinit var binding: FragmentResultBinding
+    private lateinit var resultScore: ScoreViewModelService
+    private lateinit var dataBase: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +42,7 @@ class ResultFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        resultScore = ViewModelProvider(requireActivity())[ScoreViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -49,11 +60,25 @@ class ResultFragment : Fragment() {
 
         binding.exit.setOnClickListener {
             exitClick()
+            putResult()
+        }
+
+        binding.rank.setOnClickListener {
+            rankClick()
+            putResult()
         }
 
         receiveDataFromIntent()
 
         return view
+    }
+
+    private fun rankClick() {
+        val fragment = RankFragment()
+        val fragmentManager = fragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.startFragment, fragment)
+        fragmentTransaction?.commit()
     }
 
     private fun playClick() {
@@ -73,15 +98,24 @@ class ResultFragment : Fragment() {
     }
 
     private fun receiveDataFromIntent() {
-        val arguments = arguments
-        if (arguments != null) {
-            val correctAnswer = arguments.getInt("Correct Answer", 0)
-            val wrongAnswer = arguments.getInt("Wrong Answer", 0)
+        resultScore.getResult().observe(viewLifecycleOwner, Observer {
+            binding.correct1.text = "${it.correctAns}"
+            binding.wrong1.text = "${it.wrongAns}"
+        })
+    }
 
-            // Gán giá trị vào TextViews
-            binding.correct1.text = "$correctAnswer"
-            binding.wrong1.text = "$wrongAnswer"
-        }
+
+    private fun putResult() {
+        dataBase = FirebaseDatabase.getInstance().getReference("Score")
+        val nameID = dataBase.push().key!!
+        val userResult = resultScore.getResult().value
+
+        dataBase.child(nameID).setValue(ScoreRankModel(nameID, userResult))
+            .addOnCompleteListener {
+                Toast.makeText(activity, "Add successful", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener {
+                Toast.makeText(activity, "Error ${it.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     companion object {

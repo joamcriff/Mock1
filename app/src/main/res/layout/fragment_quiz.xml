@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/question"
@@ -99,33 +99,32 @@
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_marginTop="80dp"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/finishQ"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
-            android:text="@string/finish"
-            android:textColor="#FF5722"
-            tools:layout_editor_absoluteX="46dp"
-            tools:layout_editor_absoluteY="0dp"
-            tools:ignore="MissingConstraints" />
+            android:layout_marginTop="60dp">
 
-        <Button
-            android:id="@+id/nextQ"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:text="@string/next"
-            android:textColor="#FF5722"
-            tools:layout_editor_absoluteX="223dp"
-            tools:layout_editor_absoluteY="0dp"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/finishQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+
+                android:text="@string/finish"
+                android:textSize="15sp"
+                android:background="#fff"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/nextQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+
+                android:text="@string/next"
+                android:textSize="15sp"
+                android:background="#fff"/>
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

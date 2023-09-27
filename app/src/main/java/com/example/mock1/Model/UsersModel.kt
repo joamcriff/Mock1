@@ -1,6 +1,7 @@
 package com.example.mock1.Model
 
 data class UsersModel (
-     var userId: String? = null,
-    var name: String? = null
+     var name: String? = null,
+     var correctAns: Int? = 0,
+     var wrongAns: Int? = 0
 )

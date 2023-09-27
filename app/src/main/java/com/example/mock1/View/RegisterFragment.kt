@@ -37,6 +37,7 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -54,12 +55,24 @@ class RegisterFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
 
+
         binding.btnSU.setOnClickListener {
             onClick()
         }
         return view
     }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                val fragmentManager = requireActivity().supportFragmentManager
+                fragmentManager.popBackStack()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
 
     private fun onClick() {
         val email: String = binding.emailSU.text.toString()

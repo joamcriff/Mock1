@@ -15,6 +15,8 @@ import com.example.mock1.data.repository.UserRepository
 import com.example.mock1.databinding.FragmentLoginBinding
 import com.example.mock1.utils.Resource
 import com.example.mock1.viewmodel.LoginViewModel
+import com.example.mock1.viewmodel.rank_score_view_model.ScoreViewModel
+import com.example.mock1.viewmodel.rank_score_view_model.ScoreViewModelService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -48,6 +50,7 @@ class LoginFragment : Fragment() {
     lateinit var progressDialog : ProgressDialog
 
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var loginScoreViewModel: ScoreViewModelService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +86,7 @@ class LoginFragment : Fragment() {
             LoginViewModel.ViewModelFactory(UserRepository())
         )[LoginViewModel::class.java]
 
+        loginScoreViewModel = ViewModelProvider(requireActivity())[ScoreViewModel::class.java]
 
         binding.btn1.setOnClickListener {
             signInWithGoogle()
@@ -108,7 +112,6 @@ class LoginFragment : Fragment() {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.loginFragment, fragment)
-        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
 
@@ -131,12 +134,13 @@ class LoginFragment : Fragment() {
         loginViewModel.userLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success<*> -> {
+                    val users = UsersModel()
+                    users.name?.let { loginScoreViewModel.setName(it) }
                     Toast.makeText(requireActivity(), "Login Successful", Toast.LENGTH_SHORT).show()
                     val fragment = StartFragment()
                     val fragmentManager = fragmentManager
                     val fragmentTransaction = fragmentManager?.beginTransaction()
                     fragmentTransaction?.replace(R.id.loginFragment, fragment)
-                    fragmentTransaction?.addToBackStack(null)
                     fragmentTransaction?.commit()
                 }
 
@@ -181,15 +185,14 @@ class LoginFragment : Fragment() {
                 val user : FirebaseUser? = auth.currentUser
 
                 val users = UsersModel()
-                users.userId = user?.uid
                 users.name = user?.displayName
 
+                users.name?.let { loginScoreViewModel.setName(it) }
                 user?.uid?.let { database.reference.child("Users").child(it).setValue(users) }
                 val fragment = StartFragment()
                 val fragmentManager = fragmentManager
                 val fragmentTransaction = fragmentManager?.beginTransaction()
                 fragmentTransaction?.replace(R.id.loginFragment, fragment)
-                fragmentTransaction?.addToBackStack(null)
                 fragmentTransaction?.commit()
             } else {
                 Toast.makeText(requireActivity(), "error", Toast.LENGTH_SHORT).show()

@@ -9,7 +9,7 @@ import kotlinx.coroutines.tasks.await
 
 class UserRepository {
     private val auth = FirebaseAuth.getInstance()
-    val currentUser: FirebaseUser? = auth.currentUser
+//    val currentUser: FirebaseUser? = auth.currentUser
 
     suspend fun signInWithEmailAndPassword(email: String, password: String): Resource<UsersModel> {
         return try {
@@ -17,7 +17,6 @@ class UserRepository {
             val user = authResult.user
             if (user != null) {
                 Resource.Success(UsersModel().apply {
-                    userId = user.uid
                     name = user.displayName
                 })
             } else {

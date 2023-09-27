@@ -15,7 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mock1.R
 import com.example.mock1.databinding.FragmentQuizBinding
-import com.example.mock1.viewmodel.QuestionViewModel
+import com.example.mock1.viewmodel.question_view_model.QuestionViewModel
+import com.example.mock1.viewmodel.question_view_model.QuestionViewModelService
+import com.example.mock1.viewmodel.rank_score_view_model.ScoreViewModel
+import com.example.mock1.viewmodel.rank_score_view_model.ScoreViewModelService
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +35,8 @@ class QuizFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var questionViewModel: QuestionViewModel
+    private lateinit var questionViewModel: QuestionViewModelService
+    private lateinit var scoreViewModel: ScoreViewModelService
     private lateinit var timer: CountDownTimer
     private lateinit var correctOption: Button
     private var isTimeUp = false
@@ -46,6 +50,7 @@ class QuizFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         questionViewModel = ViewModelProvider(this)[QuestionViewModel::class.java]
+        scoreViewModel = ViewModelProvider(requireActivity())[ScoreViewModel::class.java]
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -190,11 +195,9 @@ class QuizFragment : Fragment() {
     }
 
     private fun passResult() {
+        scoreViewModel.setScore(correctAnswerCount, wrongAnswerCount)
+
         val fragment = ResultFragment()
-        val bundle = Bundle()
-        bundle.putInt("Correct Answer", correctAnswerCount)
-        bundle.putInt("Wrong Answer", wrongAnswerCount)
-        fragment.arguments = bundle
         val fragmentManager = fragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.replace(R.id.quiz, fragment)

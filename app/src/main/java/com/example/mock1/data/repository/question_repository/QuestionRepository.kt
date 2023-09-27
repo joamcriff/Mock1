@@ -1,17 +1,17 @@
-package com.example.mock1.data.repository
+package com.example.mock1.data.repository.question_repository
 
 
 import com.example.mock1.Model.QuestionModel
-import com.example.mock1.viewmodel.QuestionViewModel
+import com.example.mock1.viewmodel.question_view_model.QuestionViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class QuestionRepository(private val questionViewModel: QuestionViewModel) {
+class QuestionRepository(private val questionViewModel: QuestionViewModel): QuestionRepositoryService {
     var questionList: ArrayList<QuestionModel> = arrayListOf()
-     fun getQuestions() {
+     override fun getQuestions() {
         val database = Firebase.database
         val myRef = database.getReference("questions")
 
